@@ -15,10 +15,33 @@
 	background : url('/static/images/graph_paper.png') no-repeat center center fixed;
 	background-size : cover;
      }
+     .upload-image-1 {
+       position: absolute;
+       border: 4px solid #0CC405;
+       width: 240px;
+       height: 50px;
+       padding: 20px;
+       top: 340px;
+       left: 195px;
+       background-color: black;
+       color: white;
+       font-size: 18px;
+       display: flex;              /* make it a flex container */
+       align-items: center;        /* vertical center */
+       gap: 10px;                  /* space between logo and text */
+    }
+     .logo{
+	width : 25px;
+	height : 25px;
+      }
 </style>
 </head>
 <body>
-<div class = background>
+<div class = "background">
+     <div class = "upload-image-1">
+	<img src = "{{ url_for('static', filename = 'images/image_logo.png')}}" alt = "button-text" class = "logo">
+	Upload the first image here
+     </div>
 </div>
 </body>
 </html>
