@@ -21,7 +21,7 @@
        width: 288px;
        height: 70px;
        padding: 20px;
-       top: 340px;
+       top: 350px;
        left: 195px;
        background-color: black;
        color: white;
@@ -29,7 +29,8 @@
        display: flex;              
        align-items: center;        
        gap: 10px;
-       border-radius : 10px                  
+       border-radius : 10px;
+       cursor : pointer;                
     }
     .upload-image-2{
        position: absolute;
@@ -37,7 +38,7 @@
        width: 288px;
        height: 70px;
        padding: 20px;
-       top: 340px;
+       top: 350px;
        left: 1060px;
        background-color: black;
        color: white;
@@ -45,7 +46,8 @@
        display: flex;              
        align-items: center;        
        gap: 10px;
-       border-radius : 10px                  
+       border-radius : 10px;
+       cursor : pointer;                
     }
     .button-3{
        position: absolute;
@@ -53,7 +55,7 @@
        width: 288px;
        height: 70px;
        padding: 20px;
-       top: 490px;
+       top: 640px;
        left: 627px;
        background-color: black;
        color: white;
@@ -61,27 +63,61 @@
        display: flex;              
        align-items: center;        
        gap: 10px;
-       border-radius : 10px                  
+       border-radius : 10px;
+       cursor :  pointer;                  
     }
      .logo{
 	width : 25px;
 	height : 25px;
-      }
+    }
+    .img{
+	max-width : 150px;
+	margin : 10px;
+	display : block;
+    }
+    .hidden-input{
+	display : none;
+    }
+    .input[type="file"]{
+	display : none;
+    }
+    .visible-image{
+	width : 200px;
+	height : 200px;
+    }
 </style>
 </head>
 <body>
 <div class = "background">
-     <button class = "upload-image-1">
-	<img src = "{{ url_for('static', filename = 'images/image_logo.png')}}" alt = "button-text" class = "logo">
+     <button class = "upload-image-1" onclick="document.getElementById('file1').click()">
+	<img src = "{{ url_for('static', filename ='images/image_logo.png')}}" alt = "button-text" class = "logo">
 	Upload the first image here
      </button>
-     <button class = "upload-image-2">
+     <input type ="file" id="file1" class="hidden-input" accept="image/*" onchange="previewImage(event, this)">
+     <button class = "upload-image-2" onclick = "document.getElementById('file2').click()">
 	<img src = "{{ url_for('static', filename = 'images/image_logo.png')}}" alt = "button-text" class = "logo">
 	Upload the second image here
      </button>
+     <input type ="file" id="file2" class="hidden-input" accept="image/*" onchange="previewImage(event, this)">
      <button class = "button-3">
 	Click here to find similarity.
      </button>
 </div>
+ <script>
+       function previewImage(event, input){
+           const file = event.target.files[0];
+	   if (file) {
+	       const reader = new FileReader();
+               reader.onload = function(e){
+	           const img = document.createElement("img");
+		   img.src = e.target.result;
+		   img.className = "visible-image"
+		   const button = input.previousElementSibling;
+		   button.replaceWith(img);
+	       };
+	       reader.readAsDataURL(file); 
+	  }
+       }
+     </script>
 </body>
 </html>
