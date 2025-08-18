@@ -82,8 +82,18 @@
 	display : none;
     }
     .visible-image{
-	width : 200px;
-	height : 200px;
+        position  : absolute;
+	width : 430px;
+	height : 430px;
+	top : 102px;
+	left : 195px;
+    }
+    .visible-image-2{
+        position  : absolute;
+	width : 430px;
+	height : 430px;
+	top : 102px;
+	left : 915px;
     }
 </style>
 </head>
@@ -94,11 +104,13 @@
 	Upload the first image here
      </button>
      <input type ="file" id="file1" class="hidden-input" accept="image/*" onchange="previewImage(event, this)">
+     <img id="previewImage">
      <button class = "upload-image-2" onclick = "document.getElementById('file2').click()">
 	<img src = "{{ url_for('static', filename = 'images/image_logo.png')}}" alt = "button-text" class = "logo">
 	Upload the second image here
      </button>
-     <input type ="file" id="file2" class="hidden-input" accept="image/*" onchange="previewImage(event, this)">
+     <input type ="file" id="file2" class="hidden-input" accept="image/*" onchange="previewImage2(event, this)">
+     <img id="previewImage2">
      <button class = "button-3">
 	Click here to find similarity.
      </button>
@@ -118,6 +130,20 @@
 	       reader.readAsDataURL(file); 
 	  }
        }
-     </script>
+       function previewImage2(event, input){
+           const file = event.target.files[0];
+	   if (file) {
+	       const reader = new FileReader();
+               reader.onload = function(e){
+	           const img = document.createElement("img");
+		   img.src = e.target.result;
+		   img.className = "visible-image-2"
+		   const button = input.previousElementSibling;
+		   button.replaceWith(img);
+	       };
+	       reader.readAsDataURL(file); 
+	  }
+       }
+</script>
 </body>
 </html>
