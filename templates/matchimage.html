@@ -69,36 +69,38 @@
     .cancel-button-1{
        position: absolute;
        border: 4px solid #0CC405;
-       width: 70px;
-       height: 70px;
+       width: 140px;
+       height: 100px;
        padding: 20px;
-       top: 140px;
-       left: 600px;
+       top: 0px;
+       left: 1060px;
        background-color: black;
        color: white;
-       font-size: 18px;
+       font-size: 45px;
        display: flex;              
        align-items: center;        
        gap: 10px;
        border-radius : 10px;
-       cursor :  pointer;                  
+       cursor :  pointer;
+       display : none;                  
     }
     .cancel-button-2{
        position: absolute;
        border: 4px solid #0CC405;
-       width: 70px;
-       height: 70px;
+       width: 140px;
+       height: 100px;
        padding: 20px;
-       top: 140px;
-       left: 200px;
+       top: 00px;
+       left: 340px;
        background-color: black;
        color: white;
-       font-size: 18px;
+       font-size: 45px;
        display: flex;              
        align-items: center;        
        gap: 10px;
        border-radius : 10px;
-       cursor :  pointer;                  
+       cursor :  pointer; 
+       display : none;                 
     }
      .logo{
 	width : 25px;
@@ -142,7 +144,7 @@
 	<img src = "{{ url_for('static', filename ='images/image_logo.png')}}" alt = "button-text" class = "logo">
 	Upload the first image here
      </button>
-     <input type="file" id="file1" name="image-1" class="hidden-input" accept="image/*" onchange="previewImage(event, this)">
+     <input type="file" id="file1" name="image-1" class="hidden-input" accept="image/*" onchange="previewImage(event, this, 1)">
      </form>
      <img id="previewImage">
      <form action="/" method = "POST" enctype="multipart/form-data">
@@ -150,21 +152,22 @@
 	<img src = "{{ url_for('static', filename = 'images/image_logo.png')}}" alt = "button-text" class = "logo">
 	Upload the second image here
      </button>
-     <input type="file" id="file2" name="image-2" class="hidden-input" accept="image/*" onchange="previewImage2(event, this)">
+     <input type="file" id="file2" name="image-2" class="hidden-input" accept="image/*" onchange="previewImage2(event, this, 2)">
      </form>
      <img id="previewImage2">
      <button class = "button-3">
 	Click here to find similarity.
      </button>
-     <button class = "cancel-button-1">
-	Remove Image
+     <button class = "cancel-button-1", style="padding-left : 50px;", onclick="removeImage1()">
+	X 
      </button>
-     <button class = "cancel-button-2">
-	Remove Image
+     <button class = "cancel-button-2", style="padding-left : 50px;", onclick="removeImage2()">
+	X
      </button>
 </div>
  <script>
-       function previewImage(event, input){
+       let upload = {1 : false, 2 : false};
+       function previewImage(event, input, num){
            const file = event.target.files[0];
 	   if (file) {
 	       const reader = new FileReader();
@@ -174,6 +177,9 @@
 		   img.className = "visible-image"
 		   const button = input.previousElementSibling;
 		   button.replaceWith(img);
+		   document.querySelector(".cancel-button-2").style.display = "flex";
+		   upload[2] = true;
+                   
 	       };
 	       reader.readAsDataURL(file); 
 	  }
@@ -188,10 +194,25 @@
 		   img.className = "visible-image-2"
 		   const button = input.previousElementSibling;
 		   button.replaceWith(img);
+                   document.querySelector(".cancel-button-1").style.display = "flex";
+		   upload[1] = true;
 	       };
 	       reader.readAsDataURL(file); 
 	  }
        }
+       function removeImage1(){
+       	   if (upload[1]){
+           	upload[1] = false;
+                document.querySelector(".cancel-button-1").style.display = "none";
+           }
+       }
+       function removeImage2(){
+       	   if (upload[2]){
+           	upload[2] = false;
+                document.querySelector(".cancel-button-2").style.display = "none";
+           }
+       }
+     
 </script>
 </body>
 </html>
