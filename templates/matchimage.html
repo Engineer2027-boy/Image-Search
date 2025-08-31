@@ -123,6 +123,7 @@
 	height : 430px;
 	top : 102px;
 	left : 195px;
+        display : flex;
     }
     .visible-image-2{
         position  : absolute;
@@ -130,6 +131,7 @@
 	height : 430px;
 	top : 102px;
 	left : 915px;
+	display : flex;
     }
     .cancel-symbol{
 	width : 60px;
@@ -165,54 +167,82 @@
 	X
      </button>
 </div>
- <script>
-       let upload = {1 : false, 2 : false};
-       function previewImage(event, input, num){
-           const file = event.target.files[0];
-	   if (file) {
-	       const reader = new FileReader();
-               reader.onload = function(e){
-	           const img = document.createElement("img");
-		   img.src = e.target.result;
-		   img.className = "visible-image"
-		   const button = input.previousElementSibling;
-		   button.replaceWith(img);
-		   document.querySelector(".cancel-button-2").style.display = "flex";
-		   upload[2] = true;
-                   
-	       };
-	       reader.readAsDataURL(file); 
-	  }
-       }
-       function previewImage2(event, input){
-           const file = event.target.files[0];
-	   if (file) {
-	       const reader = new FileReader();
-               reader.onload = function(e){
-	           const img = document.createElement("img");
-		   img.src = e.target.result;
-		   img.className = "visible-image-2"
-		   const button = input.previousElementSibling;
-		   button.replaceWith(img);
-                   document.querySelector(".cancel-button-1").style.display = "flex";
-		   upload[1] = true;
-	       };
-	       reader.readAsDataURL(file); 
-	  }
-       }
-       function removeImage1(){
-       	   if (upload[1]){
-           	upload[1] = false;
-                document.querySelector(".cancel-button-1").style.display = "none";
-           }
-       }
-       function removeImage2(){
-       	   if (upload[2]){
-           	upload[2] = false;
-                document.querySelector(".cancel-button-2").style.display = "none";
-           }
-       }
-     
+<script>
+    let upload = {1 : false, 2 : false};
+
+    function previewImage(event, input, num){
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e){
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.className = "visible-image";
+                img.id = "preview1"; // give ID for easy removal
+                const button = input.previousElementSibling;
+                button.replaceWith(img);
+                document.querySelector(".cancel-button-2").style.display = "flex";
+                upload[2] = true;
+            };
+            reader.readAsDataURL(file); 
+        }
+    }
+
+    function previewImage2(event, input){
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e){
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.className = "visible-image-2";
+                img.id = "preview2"; // give ID for easy removal
+                const button = input.previousElementSibling;
+                button.replaceWith(img);
+                document.querySelector(".cancel-button-1").style.display = "flex";
+                upload[1] = true;
+            };
+            reader.readAsDataURL(file); 
+        }
+    }
+
+    function removeImage1(){
+        if (upload[1]) {
+            upload[1] = false;
+            document.querySelector(".cancel-button-1").style.display = "none";
+            const img = document.getElementById("preview2");
+            if (img) {
+                img.remove();
+                // recreate the original button
+                const form = document.querySelectorAll("form")[1]; 
+                const newButton = document.createElement("button");
+                newButton.type = "button";
+                newButton.className = "upload-image-2";
+                newButton.innerHTML = `<img src="{{ url_for('static', filename = 'images/image_logo.png')}}" class="logo"> Upload the second image here`;
+                newButton.onclick = () => document.getElementById("file2").click();
+                form.insertBefore(newButton, form.firstChild);
+            }
+        }
+    }
+
+    function removeImage2(){
+        if (upload[2]) {
+            upload[2] = false;
+            document.querySelector(".cancel-button-2").style.display = "none";
+            const img = document.getElementById("preview1");
+            if (img) {
+                img.remove();
+                // recreate the original button
+                const form = document.querySelectorAll("form")[0];
+                const newButton = document.createElement("button");
+                newButton.type = "button";
+                newButton.className = "upload-image-1";
+                newButton.innerHTML = `<img src="{{ url_for('static', filename ='images/image_logo.png')}}" class="logo"> Upload the first image here`;
+                newButton.onclick = () => document.getElementById("file1").click();
+                form.insertBefore(newButton, form.firstChild);
+            }
+        }
+    }
 </script>
 </body>
 </html>
