@@ -157,7 +157,7 @@
      <input type="file" id="file2" name="image-2" class="hidden-input" accept="image/*" onchange="previewImage2(event, this, 2)">
      </form>
      <img id="previewImage2">
-     <button class = "button-3">
+     <button class = "button-3" onclick="postImage()">
 	Click here to find similarity.
      </button>
      <button class = "cancel-button-1", style="padding-left : 50px;", onclick="removeImage1()">
@@ -169,7 +169,6 @@
 </div>
 <script>
     let upload = {1 : false, 2 : false};
-
     function previewImage(event, input, num){
         const file = event.target.files[0];
         if (file) {
@@ -187,7 +186,6 @@
             reader.readAsDataURL(file); 
         }
     }
-
     function previewImage2(event, input){
         const file = event.target.files[0];
         if (file) {
@@ -205,7 +203,6 @@
             reader.readAsDataURL(file); 
         }
     }
-
     function removeImage1(){
         if (upload[1]) {
             upload[1] = false;
@@ -213,7 +210,6 @@
             const img = document.getElementById("preview2");
             if (img) {
                 img.remove();
-                // recreate the original button
                 const form = document.querySelectorAll("form")[1]; 
                 const newButton = document.createElement("button");
                 newButton.type = "button";
@@ -224,7 +220,6 @@
             }
         }
     }
-
     function removeImage2(){
         if (upload[2]) {
             upload[2] = false;
@@ -232,7 +227,6 @@
             const img = document.getElementById("preview1");
             if (img) {
                 img.remove();
-                // recreate the original button
                 const form = document.querySelectorAll("form")[0];
                 const newButton = document.createElement("button");
                 newButton.type = "button";
@@ -243,6 +237,18 @@
             }
         }
     }
+    async function postImage(){
+	let img = document.getElementbyId("previewImage").src;
+	let img1 = document.getElementbyId("previewImage2").src;
+        let response = await fetch("/compare", {
+	    method : "POST",
+	    headers : {"Content-Type" : "application/json"},
+	    body : JSON.stringify({image1 : img, image2 : img1})
+        });
+	let data = await response.json();
+	document.getElementById("result").innerText = "Similiarity: " + data.similarity + "%"; 
+    }
+    
 </script>
 </body>
 </html>
