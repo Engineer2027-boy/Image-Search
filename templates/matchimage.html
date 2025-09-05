@@ -137,6 +137,16 @@
 	width : 60px;
         height : 60px;
      }
+     .result{
+       position: absolute;
+       top: 640px;
+       left: 627px;
+       color: white;
+       font-size: 30px;
+       display: flex;                     
+       cursor :  pointer;                  
+    }
+
 </style>
 </head>
 <body>
@@ -157,9 +167,10 @@
      <input type="file" id="file2" name="image-2" class="hidden-input" accept="image/*" onchange="previewImage2(event, this, 2)">
      </form>
      <img id="previewImage2">
-     <button class = "button-3" onclick="postImage()">
+     <button type = "button" class = "button-3" onclick="postImage()">
 	Click here to find similarity.
      </button>
+     <div id="result" class="result"></div>
      <button class = "cancel-button-1", style="padding-left : 50px;", onclick="removeImage1()">
 	X 
      </button>
@@ -168,46 +179,42 @@
      </button>
 </div>
 <script>
-    let upload = {1 : false, 2 : false};
-    function previewImage(event, input, num){
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e){
-                const img = document.createElement("img");
-                img.src = e.target.result;
-                img.className = "visible-image";
-                img.id = "preview1"; // give ID for easy removal
-                const button = input.previousElementSibling;
-                button.replaceWith(img);
-                document.querySelector(".cancel-button-2").style.display = "flex";
-                upload[2] = true;
-            };
-            reader.readAsDataURL(file); 
-        }
-    }
-    function previewImage2(event, input){
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e){
-                const img = document.createElement("img");
-                img.src = e.target.result;
-                img.className = "visible-image-2";
-                img.id = "preview2"; // give ID for easy removal
-                const button = input.previousElementSibling;
-                button.replaceWith(img);
-                document.querySelector(".cancel-button-1").style.display = "flex";
-                upload[1] = true;
-            };
-            reader.readAsDataURL(file); 
-        }
-    }
-    function removeImage1(){
+  let upload = {1: false, 2: false};
+
+  function previewImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = document.getElementById("previewImage");
+      img.src = e.target.result;
+      img.className = "visible-image";
+      document.querySelector(".cancel-button-2").style.display = "flex";
+      upload[1] = true; // first image present
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function previewImage2(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = document.getElementById("previewImage2");
+      img.src = e.target.result;
+      img.className = "visible-image-2";
+      document.querySelector(".cancel-button-1").style.display = "flex";
+      upload[2] = true; // second image present
+    };
+    reader.readAsDataURL(file);
+  }
+      function removeImage1(){
         if (upload[1]) {
             upload[1] = false;
             document.querySelector(".cancel-button-1").style.display = "none";
-            const img = document.getElementById("preview2");
+            const img = document.getElementById("previewImage2");
             if (img) {
                 img.remove();
                 const form = document.querySelectorAll("form")[1]; 
@@ -224,7 +231,7 @@
         if (upload[2]) {
             upload[2] = false;
             document.querySelector(".cancel-button-2").style.display = "none";
-            const img = document.getElementById("preview1");
+            const img = document.getElementById("previewImage");
             if (img) {
                 img.remove();
                 const form = document.querySelectorAll("form")[0];
@@ -237,18 +244,26 @@
             }
         }
     }
-    async function postImage(){
-	let img = document.getElementbyId("previewImage").src;
-	let img1 = document.getElementbyId("previewImage2").src;
-        let response = await fetch("/compare", {
-	    method : "POST",
-	    headers : {"Content-Type" : "application/json"},
-	    body : JSON.stringify({image1 : img, image2 : img1})
-        });
-	let data = await response.json();
-	document.getElementById("result").innerText = "Similiarity: " + data.similarity + "%"; 
+  async function postImage() {
+    const img = document.getElementById("previewImage")?.src;
+    const img1 = document.getElementById("previewImage2")?.src;
+
+    if (!img || !img1) {
+      alert("Please upload both images first!");
+      return;
     }
-    
+
+    const response = await fetch("/compare", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ image1: img, image2: img1 })
+    });
+
+    const data = await response.json();
+    document.querySelector('.button-3').style.display = "none";
+    document.getElementById("result").innerText =
+      "Similarity: " + data.similarity + "%";
+  }
 </script>
 </body>
 </html>
