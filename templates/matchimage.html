@@ -142,9 +142,15 @@
        top: 640px;
        left: 627px;
        color: white;
-       font-size: 30px;
-       display: flex;                     
-       cursor :  pointer;                  
+       font-size: 25px;
+       display: none;                     
+       cursor :  pointer; 
+       border: 4px solid #0CC405;
+       background-color: black;
+       border-radius : 10px;
+       width: 288px;
+       height: 70px;
+       align-items : center;
     }
 
 </style>
@@ -211,8 +217,8 @@
     reader.readAsDataURL(file);
   }
       function removeImage1(){
-        if (upload[1]) {
-            upload[1] = false;
+        if (upload[2]) {
+            upload[2] = false;
             document.querySelector(".cancel-button-1").style.display = "none";
             const img = document.getElementById("previewImage2");
             if (img) {
@@ -228,8 +234,8 @@
         }
     }
     function removeImage2(){
-        if (upload[2]) {
-            upload[2] = false;
+        if (upload[1]) {
+            upload[1] = false;
             document.querySelector(".cancel-button-2").style.display = "none";
             const img = document.getElementById("previewImage");
             if (img) {
@@ -261,8 +267,22 @@
 
     const data = await response.json();
     document.querySelector('.button-3').style.display = "none";
-    document.getElementById("result").innerText =
-      "Similarity: " + data.similarity + "%";
+    document.querySelector('.result').style.display = "flex";
+
+    document.getElementById("result").innerText = "Similarity: " + data.similarity + "%";
+     if (data.similarity < 25 && data.similarity >= 0) {
+      alert("It's not similar at all");
+      return;
+    }else if(data.similarity < 50 && data.similarity >= 25){
+      alert("There is a little bit of similarity between the two images");
+      return;
+    }else if(data.similarity >= 50 && data.similarity < 75){
+      alert("There is a lot of similarity between the two images");
+      return;
+    }else{
+      alert("The images are extremely similar");
+      return;
+    }
   }
 </script>
 </body>
