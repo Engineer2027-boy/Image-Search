@@ -4,11 +4,11 @@ __________________________
 Features 
 
 
-•You can choose the image from your own computer. 
-•The image can be of any type
-•We are using flask to create this app.
-•We communicate between backend and frontend using "POST" and "GET".
-•The image matching is done using skimage.
+•You can choose the image from your own computer.    
+•The image can be of any type.    
+•We are using flask to create this app.    
+•We communicate between backend and frontend using "POST" and "GET".    
+•The image matching is done using skimage.    
 
 __________________________
 Environment Varables
