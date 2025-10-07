@@ -26,7 +26,7 @@ _________________
 ├── README.md # (this file) 
 ________________________
 License  
-[ISC](https://github.com/Engineer2027-boy/PopulationProjectionofG20countries/blob/main/LICENSE)
+[ISC](https://github.com/Engineer2027-boy/Image-Search/blob/main/LICENSE)
 _________________________
 Author  
 Ayush Aditya
