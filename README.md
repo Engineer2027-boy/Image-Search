@@ -1,4 +1,4 @@
-Image matcher
+Image matcher    
 This webapp calculates the similarity between two images and expresses it in terms of percentage
 __________________________
 Features 
