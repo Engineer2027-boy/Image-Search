@@ -11,7 +11,7 @@ Features
 •The image matching is done using skimage.    
 
 __________________________
-Environment Varables
+Environment Varables    
 •FLASK_ENV for successful deployment of flask file.
 __________________
 
